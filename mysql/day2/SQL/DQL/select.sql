@@ -57,10 +57,15 @@ Syntaxe générale:
 SELECT DISTINCT nom_colonne
 FROM nom_table;
 ======================================================*/
-
+/*
+SELECT DISTINCT DateVente, VenteID
+FROM Ventes;
+*/
 -- QUESTION 7: Donner les différentes dates auxquelles des ventes ont été réalisées
 SELECT DISTINCT *
 FROM Ventes;
+
+
 
 -- QUESTION 8: Donner les noms et prénoms distincts des employés de l'entreprise
 SELECT DISTINCT Nom, Prenom
@@ -77,7 +82,7 @@ SELECT nom_colonne
 FROM nom_table
 WHERE condition;
 ======================================================*/
--- Liste produit vendu
+-- Liste produit vendu a 50 Euro par example
 SELECT *
 FROM Produits
 WHERE PrixUnitaire = 50;
@@ -169,6 +174,8 @@ SELECT *
 FROM Clients
 WHERE Nom LIKE "c%a" ;
 
+
+-- Nom des clients qui commencent par la lettre c et du prenom qui se termine par y
 SELECT *
 FROM Clients
 WHERE Nom LIKE "c%" AND Prenom LIKE "%y";
@@ -183,9 +190,26 @@ SELECT *
 FROM Clients
 WHERE Nom LIKE "%on%";
 
+-- Le nom contient  "John"
+SELECT *
+FROM Clients
+WHERE Nom LIKE "%John%";
+
+
 -- Donner la liste des produits qui commencent par 'a'
+SELECT *
+FROM Produits
+WHERE NomProduit LIKE 'a%';
+
 -- Donner la liste des produits qui contiennent la lettre 'a'
+SELECT *
+FROM Produits
+WHERE NomProduit LIKE '%a%';
+
 -- Donner la liste des produits commençant par 'N' et finissant par 'x'
+SELECT *
+FROM Produits
+WHERE NomProduit LIKE 'N%x';
 
 /*==========================================================================================
                  Maîtriser la clause ORDER BY POUR CLASSER
@@ -200,6 +224,8 @@ ORDER BY nom_colonne [ASC | DESC], autre_nom_colonne [ASC | DESC], ...;
 SELECT *
 FROM Produits
 ORDER BY prixUnitaire ;
+
+
 -- Donner la liste des produits du prix le plus élevé au prix le moins élevé
 SELECT *
 FROM Produits
@@ -213,5 +239,5 @@ ORDER BY nom, prenom DESC;
 -- La liste des produits dont le prix est supérieur à 200, résultat par alphabétqiue suivant le nom du produit
 SELECT *
 FROM Produits
-WHERE PrixUnitaire >200
+WHERE PrixUnitaire > 200
 ORDER BY NomProduit;
