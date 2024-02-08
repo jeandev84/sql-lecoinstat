@@ -373,6 +373,11 @@ ORDER BY CA_Total
 LIMIT 5;
 
 
+SELECT employee_id, SUM(montant_total) as total_ventes
+FROM ventes
+GROUP BY employee_id
+ORDER BY total_ventes DESC
+LIMIT 5;
 
 
 /*==================================================================================
