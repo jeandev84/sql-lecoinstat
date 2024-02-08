@@ -180,20 +180,20 @@ LIMIT nombre_de_lignes;
 SELECT *
 FROM Clients
 ORDER BY Nom
-    LIMIT 10000;
+LIMIT 10000;
 
 
 -- Donner la liste des 10 produits les plus chers
 SELECT *
 FROM Produits
 ORDER BY PrixUnitaire DESC
-    LIMIT 10;
+LIMIT 10;
 
 -- Donner la liste des 10 produits les plus moins
 SELECT *
 FROM Produits
 ORDER BY PrixUnitaire
-    LIMIT 10;
+LIMIT 10;
 
 
 /*==================================================================================
@@ -219,6 +219,8 @@ FROM Clients;
 SELECT COUNT(ClientID) AS "NombreClient"
 FROM Clients;
 
+SELECT COUNT(DISTINCT ClientID) AS "NombreClient"
+FROM Clients;
 
 /*======================================================
 Fonction SUM()
@@ -271,7 +273,37 @@ SELECT AVG(DISTINCT MontantTotal) AS MoyenneDist
 FROM Ventes;
 /*==================================================================================
               Maîtriser le REGROUPEMENT des Données (GROUP BY) en SQL
+              Permet de faire une aggregation selon un critere
+              -  Par example calculer la moyenne par eleve
+              -  Par example on souhaite annaliser la liste des 10 premiers employes
+                 qui realisent le chiffre d' affaires les plus eleves
 ==================================================================================*/
+/*
+SELECT EmployeID, MontantTotal
+FROM Ventes
+ORDER BY EmployeID DESC;
+
+SELECT EmployeID, SUM(MontantTotal) AS MontantTotal
+FROM Ventes
+GROUP BY EmployeID
+ORDER BY EmployeID DESC;
+
+
+SELECT EmployeID, ClientID, SUM(MontantTotal) AS MontantTotal
+FROM Ventes
+GROUP BY EmployeID, ClientID
+ORDER BY EmployeID DESC;
+
+SELECT EmployeID, SUM(MontantTotal) AS MontantTotal
+FROM Ventes
+GROUP BY 1; Group par la position Position 1 qui est EmployeID
+
+
+SELECT EmployeID, COUNT(VenteID) AS NombreVentes
+FROM Ventes
+GROUP BY EmployeID
+ORDER BY EmployeID DESC;
+*/
 
 -- Introduction au Regroupement des Données
 -- Le regroupement des données est une fonctionnalité essentielle en SQL qui permet de regrouper les lignes de données en fonction des valeurs d'une ou plusieurs colonnes. Cette opération est souvent utilisée pour effectuer des calculs agrégés sur des groupes de données plutôt que sur l'ensemble des données.
@@ -283,14 +315,17 @@ FROM nom_table
 GROUP BY colonne1, colonne2, ...; */
 
 -- Exemple Pratique : Calculer la somme des ventes par employé.
-SELECT EmployeID, SUM(MontantTotal) AS CA_Total
+-- CA_Total (Chiffre d' affaire total)
+SELECT EmployeID, SUM(MontantTotal) AS MontantTotal
 FROM Ventes
 GROUP BY EmployeID;
 
+
 -- Exemple Pratique : Compter le nombre de ventes par employé.
-SELECT EmployeID, COUNT(VenteID) AS CA_Total
+SELECT EmployeID, COUNT(VenteID) AS NombreVentes
 FROM Ventes
 GROUP BY EmployeID;
+
 
 -- Exemple pratique: Déterminer la somme des ventes par année.
 SELECT EXTRACT(YEAR FROM DateVente) as Annee, SUM(MontantTotal) as MntTot
@@ -312,13 +347,31 @@ GROUP Annee, EmployeID;
 
 /*======================================================
 Fonction HAVING
+- Difference entre WHERE et HAVING
+- WHERE s' applique sur des variables existantes dans ma table
+- Par contre, HAVING s' applique sure des variables qui n' existe pas encore dans la table
 ======================================================*/
 
 -- La clause HAVING est utilisée avec GROUP BY pour filtrer les groupes de résultats basés sur une condition agrégée.
 
 -- Exemple: Donner la liste des employés dont la moyenne des ventes est supérieure à 1000 euros.
+SELECT YEAR(DateVente) as Annee, EmployeID, AVG(MontantTotal) as MoyenneCA
+FROM Ventes
+GROUP BY Annee, EmployeID
+HAVING MoyenneCA > 1000;
+
+SELECT YEAR(DateVente) as Annee, EmployeID, AVG(MontantTotal) as MoyenneCA
+FROM Ventes
+WHERE MontantTotal > 1000
+GROUP BY Annee, EmployeID;
 
 -- Exercice: Donner la liste des 5 employés ayant la somme des ventes la plus élevée.
+SELECT EmployeID, SUM(MontantTotal) AS CA_Total
+FROM Ventes
+GROUP BY EmployeID
+ORDER BY CA_Total
+LIMIT 5;
+
 
 
 
