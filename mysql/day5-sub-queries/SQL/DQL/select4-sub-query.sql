@@ -284,8 +284,19 @@ JOIN Clients USING(ClientID)
 JOIN Produits USING(ProduitID)
 JOIN Ventes USING(ProduitID);
 
-/* Error Code: 1054. Unknown column 'ClientID' in 'from clause' */
 
+-- Donner la liste des nom de fournisseur, le nom de produit et
+-- les noms des clients pour tous les produits
+-- qui ont été acheté plus de 50 fois
+SELECT *
+FROM
+    (SELECT ProduitID, COUNT(VenteID) AS nbproduit
+     FROM Ventes
+     GROUP BY ProduitID
+     HAVING nbproduit > 50) as t
+JOIN Clients USING(ClientID)
+JOIN Produits USING(ProduitID)
+JOIN Ventes USING(ProduitID);
 
 -- Quels produits ont été vendus par plus d'un employé ?
 -- Qui sont les clients ayant acheté le plus grand nombre de produits différents ?
