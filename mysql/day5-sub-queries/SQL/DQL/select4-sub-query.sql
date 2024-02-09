@@ -80,8 +80,6 @@ GROUP BY ClientID, Nom, Prenom;
 
 
 
-
-
 /* Comprendre les sous requêtes */
 
 /* Utilisation des sous requêtes dans la clause WHERE */
