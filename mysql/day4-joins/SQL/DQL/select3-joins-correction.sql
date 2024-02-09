@@ -242,7 +242,7 @@ FROM Vente2021;
 -- Quelle est la liste des clients qui ont réalisé plus de 2 achats en 2021
 SELECT ClientID, Nom, Prenom, COUNT(VenteID) as NbAchat
 FROM Clients
-         LEFT JOIN Vente2021 USING(ClientID)
+LEFT JOIN Vente2021 USING(ClientID)
 GROUP BY ClientID
 HAVING NbAchat > 1;
 
@@ -250,7 +250,7 @@ HAVING NbAchat > 1;
 -- Quelle est la liste des employés qui ont les ventes moyennes supérieures à 500 en 2021?
 SELECT EmployeID, Nom, Prenom, AVG(MontantTotal) as AvgVente
 FROM Employes
-         LEFT JOIN Vente2021 USING(EmployeID)
+LEFT JOIN Vente2021 USING(EmployeID)
 GROUP BY EmployeID, Nom, Prenom
 HAVING AvgVente >500;
 
