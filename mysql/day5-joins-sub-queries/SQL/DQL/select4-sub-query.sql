@@ -169,11 +169,24 @@ SELECT EmployeID,YEAR(DateVente) as Annee, SUM(MontantTotal) as CA
 FROM Ventes
 GROUP BY EmployeID,YEAR(DateVente);
 
+
+-- La moyenne annuelle de ventes de chaque employe
 SELECT EmployeID, AVG(CA) as MeanCA
 FROM
     (SELECT EmployeID,YEAR(DateVente) as Annee, SUM(MontantTotal) as CA
      FROM Ventes
      GROUP BY EmployeID,YEAR(DateVente)) AS temp
+GROUP BY EmployeID;
+
+
+-- OU ENCORE on cree une vue et on l'a reutilise dans notre requette.
+CREATE VIEW VenteTotalAnnuel AS
+SELECT EmployeID,YEAR(DateVente) as Annee, SUM(MontantTotal) as CA
+FROM Ventes
+GROUP BY EmployeID,YEAR(DateVente));
+
+SELECT EmployeID, AVG(CA) as MeanCA
+FROM VenteTotalAnnuel AS temp
 GROUP BY EmployeID;
 
 
@@ -186,10 +199,9 @@ SELECT SUM(MontantTotal) AS CA2022
 FROM Ventes
 WHERE YEAR(DateVente)=2022;
 
+
 SELECT (CA2022-CA2021)/CA2021 AS TxCroissance
-
 FROM
-
     (SELECT SUM(MontantTotal) AS CA2022
      FROM Ventes
      WHERE YEAR(DateVente)=2022) AS temp,
