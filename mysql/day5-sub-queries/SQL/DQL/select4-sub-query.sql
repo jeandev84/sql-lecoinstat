@@ -218,12 +218,11 @@ SELECT ClientID,Nom, Prenom, AVG(nbachat) as moyenne
 FROM
     (SELECT ClientID,YEAR(dateVente) AS annee, COUNT(VenteID) AS nbachat
      FROM Ventes
-     GROUP BY ClientID,YEAR(dateVente) ) AS temp
-        JOIN Clients USING(ClientID)
+     GROUP BY ClientID,YEAR(dateVente)) AS temp
+JOIN Clients USING(ClientID)
 GROUP BY ClientID, Nom, Prenom
 ORDER BY moyenne DESC
-    LIMIT 10
-;
+LIMIT 10;
 
 
 
@@ -269,9 +268,8 @@ WHERE
 
 SELECT *
 FROM Employes em
-         LEFT JOIN Ventes ve USING(EmployeID)
-         LEFT JOIN Produits pr USING(ProduitID)
-;
+LEFT JOIN Ventes ve USING(EmployeID)
+LEFT JOIN Produits pr USING(ProduitID);
 
 -- Donner la liste des nom de fournisseur, le nom de produit et
 -- les noms des clients pour tous les produits
@@ -282,13 +280,11 @@ FROM
      FROM Ventes
      GROUP BY ProduitID
      HAVING nbproduit>2) as t
-        JOIN Clients USING(ClientID)
-        JOIN Produits USING(ProduitID)
-        JOIN Ventes USING(ProduitID)
+JOIN Clients USING(ClientID)
+JOIN Produits USING(ProduitID)
+JOIN Ventes USING(ProduitID);
 
-;
-
-Error Code: 1054. Unknown column 'ClientID' in 'from clause'
+/* Error Code: 1054. Unknown column 'ClientID' in 'from clause' */
 
 
 -- Quels produits ont été vendus par plus d'un employé ?
