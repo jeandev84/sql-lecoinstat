@@ -296,6 +296,9 @@ JOIN Clients USING(ClientID)
 JOIN Produits USING(ProduitID)
 JOIN Ventes USING(ProduitID);
 
+/* Error Code: 1054. Unknown column 'ClientID' in 'from clause' */
+
+
 -- Quels produits ont été vendus par plus d'un employé ?
 -- Qui sont les clients ayant acheté le plus grand nombre de produits différents ?
 
