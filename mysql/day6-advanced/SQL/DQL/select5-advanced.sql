@@ -29,6 +29,7 @@ ORDER BY nbVente DESC;
 
 /* Donner le classement des produits en fonction de la quantité vendue QuantiteVendue(vente) RANK()*/
 -- Classement du plus vendu au moins vendu
+-- RANK() increment (+2)
 SELECT ProduitID,
        SUM(QuantiteVendue) as nbVente,
        RANK()
@@ -36,6 +37,7 @@ SELECT ProduitID,
 FROM Ventes
 GROUP BY ProduitID;
 
+-- DENSE_RANK() increment (+1)
 SELECT ProduitID,
        SUM(QuantiteVendue) as nbVente,
        DENSE_RANK()
@@ -61,7 +63,7 @@ FROM Ventes
 GROUP BY EmployeID, Annee
 ORDER BY CA DESC;
 
-
+-- PARTITION de ma table par annee selon le critere ORDER BY
 SELECT EmployeID, YEAR(dateVente) AS Annee, SUM(MontantTotal) AS CA,
     DENSE_RANK()
     OVER (PARTITION BY YEAR(dateVente)
@@ -70,6 +72,7 @@ FROM Ventes
 GROUP BY EmployeID, Annee;
 
 
+-- Filtrer PARTITION de ma table par annee selon le critere ORDER BY
 SELECT temp.EmployeID, temp.Annee, temp.CA, temp.Classement
 FROM
     (SELECT EmployeID, YEAR(dateVente) AS Annee, SUM(MontantTotal) AS CA,
@@ -78,10 +81,10 @@ FROM
          ORDER BY SUM(MontantTotal) DESC) As Classement
      FROM Ventes
      GROUP BY EmployeID, Annee) AS temp
-
 WHERE Classement BETWEEN 1 AND 3;
 
 
+-- Avec Jointures
 SELECT Nom, Prenom, temp.EmployeID, temp.Annee, temp.CA, temp.Classement
 FROM
     (SELECT EmployeID, YEAR(dateVente) AS Annee, SUM(MontantTotal) AS CA,
@@ -89,12 +92,12 @@ FROM
          OVER (PARTITION BY YEAR(dateVente)
          ORDER BY SUM(MontantTotal) DESC) As Classement
      FROM Ventes
-     GROUP BY EmployeID, Annee) AS temp JOIN Employes USING(EmployeID)
-
+     GROUP BY EmployeID, Annee) AS temp
+JOIN Employes USING(EmployeID)
 WHERE Classement BETWEEN 1 AND 3;
 
 
-
+-- CREATE VIEW
 CREATE VIEW classement AS
 SELECT EmployeID, YEAR(dateVente) AS Annee, SUM(MontantTotal) AS CA,
         DENSE_RANK()
@@ -109,6 +112,7 @@ WHERE Classement BETWEEN 1 AND 3;
 
 
 /* Donner le top 3 des meilleurs clients en terme de chiffre d'affaire par trimestre (Quater) pour chaque année*/
+-- QUARTER permet d' avoir chaque trimestre
 
 /*CA par client et par trimestre*/
 SELECT ClientID, YEAR(DateVente) AS Annee, QUARTER(DateVente) as Trimestre, AVG(MontantTotal) AS CA
