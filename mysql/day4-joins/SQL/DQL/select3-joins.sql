@@ -48,53 +48,53 @@ L'opération INNER JOIN retourne uniquement les lignes qui ont une correspondanc
 
 SELECT VenteID, nom, prenom
 FROM Ventes
-         INNER JOIN Employes ON Ventes.EmployeID=Employes.EmployeID;
+INNER JOIN Employes ON Ventes.EmployeID = Employes.EmployeID;
 
 -- Utilisation de USING
 SELECT VenteID, nom, prenom
 FROM Ventes
-         INNER JOIN Employes USING(EmployeID);
+INNER JOIN Employes USING(EmployeID);
 
 -- Utilisation de JOIN
 SELECT VenteID, nom, prenom
 FROM Ventes
-         JOIN Employes USING(EmployeID);
+JOIN Employes USING(EmployeID);
 
 -- Utilisation de JOIN
 SELECT VenteID, nom, prenom
 FROM Ventes AS v
-         JOIN Employes USING(EmployeID);
+JOIN Employes USING(EmployeID);
 
 
 
 SELECT VenteID, nom, prenom
 FROM Ventes AS ve
-         JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
+JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
 
 SELECT *
 FROM Ventes AS ve
-         JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
+JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
 
 
 
 SELECT *
 FROM Ventes AS ve
-         JOIN Employes AS em USING(EmployeID);
+JOIN Employes AS em USING(EmployeID);
 
 
 SELECT ve.EmployeID
 FROM Ventes AS ve
-         JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
+JOIN Employes AS em ON ve.EmployeID=em.EmployeID;
 
 
 -- Exercice: Donner pour chaque produit de la base de données le nom et l'adresse de son fournisseur
-SELECT ProduitID, NomFournisseur, adresse
+SELECT ProduitID, NomFournisseur, Adresse
 FROM Fournisseurs fo
-         JOIN Produits pr USING(FournisseurID);
+JOIN Produits pr USING(FournisseurID);
 
-SELECT ProduitID,NomProduit, NomFournisseur, adresse
+SELECT ProduitID, NomProduit, NomFournisseur, Adresse
 FROM Fournisseurs fo
-         JOIN Produits pr ON fo.FournisseurID = pr.ProduitID;
+JOIN Produits pr ON fo.FournisseurID = pr.FournisseurID;
 
 
 
@@ -103,7 +103,8 @@ FROM Fournisseurs fo
 -- Donner le nom et prénom des employés ayant réalisé la somme des ventes les plus élevées
 
 SELECT EmployeID, Nom, Prenom, SUM(MontantTotal) AS CA
-FROM Employes JOIN Ventes USING(EmployeID)
+FROM Employes
+JOIN Ventes USING(EmployeID)
 GROUP BY EmployeID, Nom, Prenom
 ORDER BY CA DESC;
 
@@ -138,14 +139,14 @@ L'opération RIGHT JOIN fonctionne de manière similaire mais retourne toutes le
 -- Question donner pour chaque employé, le nom, le prénom et le nombre de vente réalisé (il faut conserver dans la base les employés qui ont des ventes nulles)
 SELECT EmployeID, Nom, Prenom, COUNT(VenteID) as NbVente
 FROM Employes
-         LEFT JOIN Ventes USING (EmployeID)
+LEFT JOIN Ventes USING (EmployeID)
 GROUP BY EmployeID, Nom, Prenom
 ORDER BY NbVente;
 
 
 SELECT EmployeID, Nom, Prenom, COUNT(VenteID) as NbVente
 FROM Employes
-         JOIN Ventes USING (EmployeID)
+JOIN Ventes USING (EmployeID)
 GROUP BY EmployeID, Nom, Prenom
 ORDER BY NbVente;
 
@@ -154,14 +155,14 @@ ORDER BY NbVente;
 -- Donner pour chaque fournisseur son nom, son email et le nombre de produits fournis (laisser des fournisseurs qui n'ont aucun produit)
 SELECT nomFournisseur, email, COUNT(ProduitID) as nbproduit
 FROM Fournisseurs f
-         LEFT JOIN Produits USING (FournisseurID)
+LEFT JOIN Produits USING (FournisseurID)
 GROUP BY nomFournisseur, email
 ORDER BY nbproduit;
 
 
 SELECT nomFournisseur, email, COUNT(ProduitID) as nbproduit
 FROM Fournisseurs f
-         JOIN Produits USING (FournisseurID)
+JOIN Produits USING (FournisseurID)
 GROUP BY nomFournisseur, email
 ORDER BY nbproduit;
 
@@ -171,7 +172,7 @@ ORDER BY nbproduit;
 
 SELECT Nom, Prenom, AVG(MontantTotal) as CAAvg
 FROM Clients
-         LEFT JOIN Ventes USING(ClientID)
+LEFT JOIN Ventes USING(ClientID)
 GROUP BY Nom, Prenom;
 
 
@@ -180,7 +181,7 @@ GROUP BY Nom, Prenom;
 -- COALESCE
 SELECT Nom, Prenom, COALESCE(AVG(MontantTotal),0) as CAAvg
 FROM Clients
-         LEFT JOIN Ventes USING(ClientID)
+LEFT JOIN Ventes USING(ClientID)
 GROUP BY Nom, Prenom;
 
 
