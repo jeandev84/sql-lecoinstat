@@ -96,6 +96,8 @@ FROM Ventes;
 /*
 Les CTE, ou 'Expressions de Table Communes', permettent de créer des ensembles de résultats temporaires accessibles dans une requête SELECT, INSERT, UPDATE ou DELETE. Elles sont définies avec le mot-clé WITH suivi du nom de la CTE et du mot-clé AS qui introduit la requête de la CTE.
 
+WITH ne stock pas la requette en memoire mais temporaire
+
 Forme Générale:
 WITH Nom_CTE AS (
     -- Requête de la CTE ici
@@ -127,16 +129,17 @@ SELECT ClientID,
 FROM Ventes
 GROUP BY ClientID, Annee;
 
--- Classement par année
+-- Premiere option : Classement par année
 CREATE VIEW Temp as (
-                    SELECT ClientID,
-                        YEAR(DateVente) AS Annee,
-                        SUM(MontantTotal) AS CA,
-                        RANK()
-                        OVER(PARTITION BY YEAR(DateVente)
-                        ORDER BY SUM(MontantTotal) DESC) As Classement
-                    FROM Ventes
-                    GROUP BY ClientID, Annee);
+    SELECT ClientID,
+        YEAR(DateVente) AS Annee,
+        SUM(MontantTotal) AS CA,
+        RANK()
+        OVER(PARTITION BY YEAR(DateVente)
+        ORDER BY SUM(MontantTotal) DESC) As Classement
+    FROM Ventes
+    GROUP BY ClientID, Annee
+);
 
 SELECT *
 FROM Temp
@@ -157,32 +160,30 @@ WHERE Classement BETWEEN 1 AND 3;
 
 -- Troisième option CTE
 WITH tempCA AS (
-
     SELECT ClientID,
     YEAR(DateVente) AS Annee,
     SUM(MontantTotal) AS CA,
     RANK()
     OVER(PARTITION BY YEAR(DateVente)
     ORDER BY SUM(MontantTotal) DESC) As Classement
-FROM Ventes
-GROUP BY ClientID, Annee
-    )
+    FROM Ventes
+    GROUP BY ClientID, Annee
+)
 SELECT *
 FROM tempCA
 WHERE Classement BETWEEN 1 AND 3;
 
 
 WITH tempCA AS (
-
     SELECT ClientID,
     YEAR(DateVente) AS Annee,
     SUM(MontantTotal) AS CA,
     RANK()
     OVER(PARTITION BY YEAR(DateVente)
     ORDER BY SUM(MontantTotal) DESC) As Classement
-FROM Ventes
-GROUP BY ClientID, Annee
-    )
+    FROM Ventes
+    GROUP BY ClientID, Annee
+)
 SELECT *
 FROM tempCA
 WHERE Classement BETWEEN 1 AND  3 ;
@@ -192,11 +193,9 @@ WHERE Classement BETWEEN 1 AND  3 ;
 
 -- Donner pour chaque client le chiffre d'affaires
 WITH temp1 AS (
-
     SELECT ClientID, SUM(MontantTotal) AS CA
     FROM Ventes
     GROUP BY ClientID
-
 )
 SELECT *
 FROM temp1
@@ -254,23 +253,17 @@ FROM Clients;
 /* Ajouter le nom des fournisseurs */
 SELECT Nom
 FROM Employes
-
 UNION
-
 SELECT Nom
 FROM Clients
-
 UNION
-
 SELECT NomFournisseur AS Nom
 FROM Fournisseurs;
 
 -- Nom et prenom de tous les employés
 SELECT Nom,Prenom
 FROM Employes
-
 UNION
-
 SELECT Nom,Prenom
 FROM Clients;
 
