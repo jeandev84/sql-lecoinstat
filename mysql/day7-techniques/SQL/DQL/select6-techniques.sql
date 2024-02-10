@@ -302,9 +302,7 @@ Explication:
 
 SELECT Nom,Prenom
 FROM Employes
-
 UNION ALL
-
 SELECT Nom,Prenom
 FROM Clients;
 
