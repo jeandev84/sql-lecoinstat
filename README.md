@@ -1,1 +1,1 @@
-# course-sql-lecoinstat
+# sql-lecoinstat
